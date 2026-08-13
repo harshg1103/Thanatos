@@ -1,0 +1,21 @@
+name: "research_swarm_pipeline"
+description: "Sandboxed multi-agent research swarm with searcher, synthesizer, and evaluator."
+version: "1.0"
+agents:
+  - id: "searcher"
+    role: "Information Retrieval Specialist"
+    system_prompt: "You query knowledge sources and extract raw factual premises."
+  - id: "synthesizer"
+    role: "Literature Synthesizer"
+    system_prompt: "You aggregate raw findings into structured research summaries."
+  - id: "evaluator"
+    role: "Fact Checker & Analyst"
+    system_prompt: "You evaluate synthesized reports for factual accuracy and logical coherence."
+
+workflow:
+  entrypoint: "searcher"
+  transitions:
+    - from: "searcher"
+      to: "synthesizer"
+    - from: "synthesizer"
+      to: "evaluator"

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thanatos"
+version = "0.1.0"
+description = "Temporal Hallucination & Adversarial Neurosymbolic Attack Targeting Orchestrated Systems"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "TY CS D-16 Group", email = "harsh.gupta241@vit.edu" }
+]
+dependencies = [
+    "pydantic>=2.8.0",
+    "fastapi>=0.112.0",
+    "z3-solver>=4.12.2.0",
+    "networkx>=3.3",
+    "langgraph>=0.2.0"
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --import-mode=importlib"
+testpaths = [
+    "tests"
+]
+pythonpath = [
+    ".",
+    "packages/core",
+    "packages/swarm",
+    "packages/formal",
+    "packages/probing",
+    "packages/aegis",
+    "services/api",
+    "emulators"
+]

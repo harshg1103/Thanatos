@@ -1,0 +1,16 @@
+name: "rag_chatbot_pipeline"
+description: "Sandboxed RAG chatbot pipeline with context retriever and response generator."
+version: "1.0"
+agents:
+  - id: "retriever"
+    role: "Vector Context Retriever"
+    system_prompt: "You retrieve context documents relevant to the user request."
+  - id: "generator"
+    role: "Grounded Response Generator"
+    system_prompt: "You answer user questions strictly based on retrieved context documents."
+
+workflow:
+  entrypoint: "retriever"
+  transitions:
+    - from: "retriever"
+      to: "generator"

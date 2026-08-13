@@ -1,0 +1,21 @@
+name: "coding_agent_pipeline"
+description: "Sandboxed multi-agent coding assistant with planner, coder, and reviewer agents."
+version: "1.0"
+agents:
+  - id: "planner"
+    role: "System Architect"
+    system_prompt: "You break down software requirements into logical subcomponents and specifications."
+  - id: "coder"
+    role: "Lead Software Developer"
+    system_prompt: "You write clean, modular Python code adhering strictly to the architect's design specs."
+  - id: "reviewer"
+    role: "Security & QA Auditor"
+    system_prompt: "You audit code against security guidelines and verify logic correctness."
+
+workflow:
+  entrypoint: "planner"
+  transitions:
+    - from: "planner"
+      to: "coder"
+    - from: "coder"
+      to: "reviewer"
