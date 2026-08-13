@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
@@ -11,7 +11,7 @@ class BeliefNode(BaseModel):
     source_agent: str = Field(..., description="Name of the agent that produced or adopted this belief")
     turn_index: int = Field(..., description="Conversation turn index where belief was recorded")
     is_corrupted: bool = Field(default=False, description="Flag indicating if this belief is an injected false state")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class BeliefEdge(BaseModel):

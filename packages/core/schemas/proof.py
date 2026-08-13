@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 from pydantic import BaseModel, Field
 
@@ -20,7 +20,7 @@ class Z3ProofCertificate(BaseModel):
     smt_formula: SMTFormula
     proof_tree_depth: int
     solver_execution_time_ms: float
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class JSONLDProof(BaseModel):
