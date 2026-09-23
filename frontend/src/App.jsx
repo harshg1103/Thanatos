@@ -148,9 +148,75 @@ export default function App() {
 
       {/* Main Container */}
       <main style={{ flexGrow: 1, maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '20px' }}>
-        {/* Studio & Live Execution View */}
+        {/* 1. Attack Simulator Tab */}
         {activeTab === 'studio' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {/* High-Level Impact Summary Banner */}
+            {runResult && (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '16px'
+              }}>
+                {/* Card 1: Attack Result & Cascade Depth */}
+                <div className="glass-panel" style={{
+                  padding: '16px 20px',
+                  borderLeft: `4px solid ${runResult.is_corrupted ? 'var(--accent-crimson)' : 'var(--accent-emerald)'}`,
+                  background: runResult.is_corrupted ? 'rgba(255, 51, 102, 0.05)' : 'rgba(6, 214, 160, 0.05)'
+                }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>
+                    ATTACK CASCADE IMPACT
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: runResult.is_corrupted ? 'var(--accent-crimson)' : 'var(--accent-emerald)' }}>
+                      {runResult.is_corrupted ? '💀 CORRUPTED (Successful)' : '🛡️ CLEAN BASELINE'}
+                    </span>
+                    <span className={`badge ${runResult.is_corrupted ? 'badge-crimson' : 'badge-emerald'}`}>
+                      {runResult.cascade_depth} Handoffs Corrupted
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card 2: Z3 SMT Formal Proof Status */}
+                <div className="glass-panel" style={{
+                  padding: '16px 20px',
+                  borderLeft: '4px solid var(--accent-cyan)',
+                  background: 'rgba(0, 242, 254, 0.05)'
+                }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>
+                    Z3 FORMAL SMT SOLVER
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--accent-cyan)' }}>
+                      {runResult.z3_proof_certificate?.is_provably_causal ? '✅ Mathematically Proven (B → D)' : '⚠️ Unverified'}
+                    </span>
+                    <span className="badge badge-cyan">
+                      {runResult.z3_proof_certificate?.solver_execution_time_ms || 0} ms
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card 3: AEGIS Defense Radar Status */}
+                <div className="glass-panel" style={{
+                  padding: '16px 20px',
+                  borderLeft: `4px solid ${runResult.defense_report?.alert_triggered ? 'var(--accent-gold)' : 'var(--accent-purple)'}`,
+                  background: 'rgba(131, 56, 236, 0.05)'
+                }}>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>
+                    AEGIS ANOMALY GUARDRAIL
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: runResult.defense_report?.alert_triggered ? 'var(--accent-gold)' : 'var(--accent-purple)' }}>
+                      {runResult.defense_report?.alert_triggered ? '⚠️ Anomaly Flagged' : '🙈 Undetected Stealth'}
+                    </span>
+                    <span className="badge badge-purple">
+                      Score: {runResult.defense_report?.max_anomaly_score || 0.0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <AttackStudio
               scenario={scenario}
               setScenario={setScenario}
@@ -195,47 +261,37 @@ export default function App() {
               </div>
             )}
 
-            {/* Split Row: DAG Canvas & Agent Terminal */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', gap: '20px' }}>
-              <BeliefDagCanvas
-                beliefGraph={runResult?.belief_graph}
-                cascadeDepth={runResult?.cascade_depth || 0}
-              />
-              <AgentTerminal
-                turns={runResult?.turns}
-                finalOutput={runResult?.final_output}
-                isCorrupted={runResult?.is_corrupted}
-              />
-            </div>
-
-            {/* Bottom Row: Formal Z3 Proof Inspector */}
-            <ArbiterProofViewer
-              z3ProofCertificate={runResult?.z3_proof_certificate}
-              jsonldProof={runResult?.jsonld_proof}
+            {/* Clean Agent Terminal View */}
+            <AgentTerminal
+              turns={runResult?.turns}
+              finalOutput={runResult?.final_output}
+              isCorrupted={runResult?.is_corrupted}
             />
           </div>
         )}
 
-        {/* Dedicated DAG & Formal Verification Tab */}
+        {/* 2. Dedicated Belief DAG View */}
         {activeTab === 'dag' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            <BeliefDagCanvas
-              beliefGraph={runResult?.belief_graph}
-              cascadeDepth={runResult?.cascade_depth || 0}
-            />
-            <ArbiterProofViewer
-              z3ProofCertificate={runResult?.z3_proof_certificate}
-              jsonldProof={runResult?.jsonld_proof}
-            />
-          </div>
+          <BeliefDagCanvas
+            beliefGraph={runResult?.belief_graph}
+            cascadeDepth={runResult?.cascade_depth || 0}
+          />
         )}
 
-        {/* AEGIS Defense Tab */}
+        {/* 3. Dedicated Z3 Formal Proof View */}
+        {activeTab === 'proof' && (
+          <ArbiterProofViewer
+            z3ProofCertificate={runResult?.z3_proof_certificate}
+            jsonldProof={runResult?.jsonld_proof}
+          />
+        )}
+
+        {/* 4. AEGIS Defense Tab */}
         {activeTab === 'defense' && (
           <AegisRadar defenseReport={runResult?.defense_report} />
         )}
 
-        {/* Benchmarks Tab */}
+        {/* 5. Benchmarks Tab */}
         {activeTab === 'benchmarks' && (
           <BenchmarkView />
         )}

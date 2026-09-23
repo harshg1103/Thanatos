@@ -47,48 +47,55 @@ export default function Navbar({ activeTab, setActiveTab, onOpenReport, systemOn
           <button
             onClick={() => setActiveTab('studio')}
             className={`btn ${activeTab === 'studio' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+            style={{ padding: '8px 14px', fontSize: '0.82rem', fontWeight: '600' }}
           >
-            <Activity size={15} /> Attack & Execution Studio
+            <Activity size={15} /> 1. Simulator
           </button>
           <button
             onClick={() => setActiveTab('dag')}
             className={`btn ${activeTab === 'dag' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+            style={{ padding: '8px 14px', fontSize: '0.82rem', fontWeight: '600' }}
           >
-            <Cpu size={15} /> Belief DAG & Z3 Prover
+            <GitBranch size={15} /> 2. Belief Graph
+          </button>
+          <button
+            onClick={() => setActiveTab('proof')}
+            className={`btn ${activeTab === 'proof' ? 'btn-primary' : 'btn-outline'}`}
+            style={{ padding: '8px 14px', fontSize: '0.82rem', fontWeight: '600' }}
+          >
+            <Cpu size={15} /> 3. Z3 Math Proof
           </button>
           <button
             onClick={() => setActiveTab('defense')}
             className={`btn ${activeTab === 'defense' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+            style={{ padding: '8px 14px', fontSize: '0.82rem', fontWeight: '600' }}
           >
-            <Shield size={15} /> AEGIS Defense & Radar
+            <Shield size={15} /> 4. Security Radar
           </button>
           <button
             onClick={() => setActiveTab('benchmarks')}
             className={`btn ${activeTab === 'benchmarks' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ padding: '6px 14px', fontSize: '0.8rem' }}
+            style={{ padding: '8px 14px', fontSize: '0.82rem', fontWeight: '600' }}
           >
-            <BarChart3 size={15} /> Empirical Benchmarks
+            <BarChart3 size={15} /> 5. Benchmarks
           </button>
         </nav>
 
         {/* Actions & Health Status */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '20px', background: 'rgba(6, 214, 160, 0.08)', border: '1px solid rgba(6, 214, 160, 0.25)' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: systemOnline ? 'var(--accent-emerald)' : 'var(--accent-crimson)', boxShadow: '0 0 8px var(--accent-emerald)' }} />
-            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: '600', color: 'var(--accent-emerald)' }}>
-              {systemOnline ? '7 AGENTS LIVE' : 'CONNECTING...'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: '20px', background: systemOnline ? 'rgba(6, 214, 160, 0.08)' : 'rgba(255, 51, 102, 0.08)', border: `1px solid ${systemOnline ? 'rgba(6, 214, 160, 0.25)' : 'rgba(255, 51, 102, 0.25)'}` }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: systemOnline ? 'var(--accent-emerald)' : 'var(--accent-crimson)', boxShadow: systemOnline ? '0 0 8px var(--accent-emerald)' : '0 0 8px var(--accent-crimson)' }} />
+            <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: '600', color: systemOnline ? 'var(--accent-emerald)' : 'var(--accent-crimson)' }}>
+              {systemOnline ? 'SYSTEM READY' : 'OFFLINE'}
             </span>
           </div>
 
           <button
             onClick={onOpenReport}
             className="btn btn-outline"
-            style={{ borderColor: 'rgba(0, 242, 254, 0.4)', color: 'var(--accent-cyan)' }}
+            style={{ borderColor: 'rgba(0, 242, 254, 0.4)', color: 'var(--accent-cyan)', fontSize: '0.8rem' }}
           >
-            <FileText size={15} /> Midsem Audit Report
+            <FileText size={15} /> Export Audit Report
           </button>
         </div>
       </div>
