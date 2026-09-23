@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Cpu, Activity, Award, Sparkles, Terminal, FileText, BarChart3 } from 'lucide-react';
+import { Shield, Cpu, Activity, Award, Sparkles, Terminal, FileText, BarChart3, GitBranch } from 'lucide-react';
 
 export default function Navbar({ activeTab, setActiveTab, onOpenReport, systemOnline }) {
   return (
